@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6f3ee" />
+  <title>Tab</title>
+  <meta name="description" content="Tab turns a voice note into a PayPal invoice and politely follows up with the people who owe you." />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/icon.svg" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@32.3.3/styles/ag-grid.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@32.3.3/styles/ag-theme-quartz.css" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <a class="wordmark" href="#home" aria-label="Tab home">
+        <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#1f3b5c"/><path d="M9 11h14M16 11v12" stroke="#f6f3ee" stroke-width="3.2" stroke-linecap="round"/><circle cx="23.5" cy="22.5" r="2.6" fill="#f2b33d"/></svg>
+        <span>tab</span>
+      </a>
+      <nav class="tabs" aria-label="Sections">
+        <a href="#home" data-view="home">Home</a>
+        <a href="#money" data-view="money">Money</a>
+        <a href="#books" data-view="books">Books</a>
+      </nav>
+      <button class="icon-btn" id="settingsBtn" aria-label="Settings">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7Zm7.4-2.5.1-1-.1-1 2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5c-.6.3-1.2.6-1.7 1l-2.4-1-2 3.4 2 1.6-.1 1 .1 1-2 1.6 2 3.4 2.4-1c.5.4 1.1.7 1.7 1l.4 2.5h4l.4-2.5c.6-.3 1.2-.6 1.7-1l2.4 1 2-3.4-2-1.6Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================= HOME ================= -->
+    <section class="view" id="view-home">
+      <div class="home-grid">
+        <div class="col">
+          <div class="hero">
+            <div class="hero-label" id="heroLabel">People owe you</div>
+            <div class="hero-amount" id="heroAmount">—</div>
+            <div class="hero-sub" id="heroSub"></div>
+          </div>
+
+          <div class="today hidden" id="today" aria-live="polite"></div>
+
+          <!-- capture -->
+          <div class="capture" id="capture">
+            <h2 class="section-title">New sale</h2>
+            <button class="record" id="micBtn" aria-label="Hold a voice note: say who bought what">
+              <span class="record-dot">
+                <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12h-2Z"/></svg>
+              </span>
+              <span class="record-text">
+                <strong id="micLabel">Tap and say who bought what</strong>
+                <small id="micHint">“Priya took three dozen cupcakes, she'll pay Friday”</small>
+              </span>
+            </button>
+            <div class="capture-row">
+              <textarea id="note" rows="2" placeholder="Or type it here"></textarea>
+              <button class="btn dark" id="parseBtn">Next</button>
+            </div>
+            <div class="capture-foot">
+              <label class="lang">Speaking
+                <select id="lang" aria-label="Language you're speaking">
+                  <option value="en-US">English</option>
+                  <option value="es-US">Español</option>
+                  <option value="hi-IN">हिन्दी</option>
+                  <option value="ta-IN">தமிழ்</option>
+                  <option value="it-IT">Italiano</option>
+                  <option value="fr-FR">Français</option>
+                  <option value="pt-BR">Português</option>
+                  <option value="ar-SA">العربية</option>
+                  <option value="zh-CN">中文</option>
+                  <option value="yo-NG">Yorùbá</option>
+                </select>
+              </label>
+              <div class="examples" id="examples">
+                <button class="link" data-text="Priya took three dozen cupcakes for her daughter's party, she'll pay Friday">Example</button>
+                <button class="link" data-text="Daniela me pidió un pastel de tres leches para el sábado, son 65 dólares, me paga el lunes" data-lang="es-US">Ejemplo</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- confirm -->
+          <div class="confirm hidden" id="confirm" aria-live="polite"></div>
+        </div>
+
+        <div class="col">
+          <div class="list-head">
+            <h2 class="section-title">Who owes you</h2>
+            <button class="link" id="showPaid">Show paid</button>
+          </div>
+          <ul class="people" id="people"></ul>
+          <h2 class="section-title small">Lately</h2>
+          <ul class="activity" id="activity"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MONEY ================= -->
+    <section class="view hidden" id="view-money">
+      <div class="narrow">
+        <div class="hero">
+          <div class="hero-label">Next two weeks</div>
+          <div class="hero-amount small" id="moneyHeadline">—</div>
+          <div class="hero-sub" id="moneySub"></div>
+        </div>
+        <div class="panel">
+          <div class="chart" id="chart" role="img" aria-label="Projected cash for the next 14 days"></div>
+          <div class="chart-legend"><span><i class="sw line"></i>Cash you'll have</span><span><i class="sw bill"></i>Bill due</span></div>
+        </div>
+        <div class="panel">
+          <div class="row-between">
+            <label class="field-label" for="cashInput">Cash you have right now</label>
+            <div class="cash-input"><span>$</span><input id="cashInput" type="number" inputmode="decimal" min="0" step="1" /></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="row-between"><h2 class="section-title flush">Bills coming up</h2><button class="link" id="addBill">Add a bill</button></div>
+          <div id="billList"></div>
+        </div>
+        <p class="fine" id="income"></p>
+      </div>
+    </section>
+
+    <!-- ================= BOOKS ================= -->
+    <section class="view hidden" id="view-books">
+      <div class="books-head">
+        <div>
+          <h1 class="page-title">Books</h1>
+          <p class="fine">Every invoice, in one place. Tap a row to open it.</p>
+        </div>
+        <div class="books-tools">
+          <div class="seg" role="tablist" id="filterSeg">
+            <button class="active" data-filter="open">Open</button>
+            <button data-filter="late">Late</button>
+            <button data-filter="all">All</button>
+          </div>
+          <input id="search" type="search" placeholder="Search" aria-label="Search invoices" />
+          <button class="btn ghost small" id="exportBtn">Export CSV</button>
+        </div>
+      </div>
+      <div class="panel flush"><div id="grid" class="ag-theme-quartz grid-host"></div></div>
+    </section>
+  </main>
+
+  <!-- bottom sheet / dialog -->
+  <div class="sheet-backdrop hidden" id="sheet">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="sheet-grip" aria-hidden="true"></div>
+      <div class="sheet-head">
+        <h3 id="sheetTitle"></h3>
+        <button class="icon-btn" id="sheetClose" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="sheet-body" id="sheetBody"></div>
+      <div class="sheet-foot" id="sheetFoot"></div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@32.3.3/dist/ag-grid-community.min.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
