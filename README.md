@@ -1,10 +1,8 @@
-# Tab — get paid without the awkward part
+# Tab
 
 **Tab turns a voice note into a PayPal invoice, then politely chases the people who owe you, in their language and your voice, before you run short on rent.**
 
-**Live demo: https://tab-cd8v.onrender.com** (PayPal sandbox; best on a phone or in Chrome for voice. The free server sleeps when idle, so the first load can take about 30 seconds.)
 
-Built for the PayPal AI Hackathon 2026 with PayPal Invoicing + Google Gemini (free tier), with Claude as a drop-in alternative.
 
 ## For judges: try it in 3 minutes
 
