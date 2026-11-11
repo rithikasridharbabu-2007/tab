@@ -14,13 +14,13 @@ One-person businesses that run on *"pay me Friday"*: home bakers, tutors, babysi
 
 | | |
 |---|---|
-| 🎙 **Say it** | *"Priya took three dozen cupcakes, she'll pay Friday."* In any language. |
-| ✅ **Confirm one sentence** | *"Invoice Priya $90 for 3 dozen cupcakes, due Friday"*, plus a preview of the note Priya will get, written in **her** language in **your** voice. |
-| 💳 **Send with PayPal** | A real PayPal invoice with a Pay button, with a 5-second undo. It can also go out on WhatsApp. |
-| 📅 **Know what's coming** | A 14-day cash outlook against your bills: *"You'll be $450 short for rent on Friday."* |
-| 🤝 **Follow up for you** | A daily plan: a gentle nudge, a firmer reminder, an offer to split the bill, or *leave them be, they were reminded today.* You approve, Tab sends. |
-| 💵 **Cash counts too** | "Got paid in cash" records the payment on the PayPal invoice. |
-| 📒 **Books** | Every invoice in one table: filter, search, export to CSV. |
+| **Say it** | *"Priya took three dozen cupcakes, she'll pay Friday."* In any language. |
+| **Confirm one sentence** | *"Invoice Priya $90 for 3 dozen cupcakes, due Friday"*, plus a preview of the note Priya will get, written in **her** language in **your** voice. |
+| **Send with PayPal** | A real PayPal invoice with a Pay button, with a 5-second undo. It can also go out on WhatsApp. |
+| **Know what's coming** | A 14-day cash outlook against your bills: *"You'll be $450 short for rent on Friday."* |
+| **Follow up for you** | A daily plan: a gentle nudge, a firmer reminder, an offer to split the bill, or *leave them be, they were reminded today.* You approve, Tab sends. |
+| **Cash counts too** | "Got paid in cash" records the payment on the PayPal invoice. |
+| **Books** | Every invoice in one table: filter, search, export to CSV. |
 
 The AI never moves money or sends a message on its own. It drafts and plans; you decide.
 
