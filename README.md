@@ -26,7 +26,7 @@ The AI never moves money or sends a message on its own. It drafts and plans; you
 
 ## Try it (3 minutes)
 
-1. Open the [live demo](https://tab-cd8v.onrender.com) (sandbox, no sign-up; the free server can take about 30 seconds to wake up). Tap **Example** (or the mic), then **Next**, then **Send with PayPal**.
+1. Open Tab. Tap **Example** (or the mic), then **Next**, then **Send with PayPal**.
 2. Get paid: open the person → **their pay page** and pay with a PayPal sandbox buyer account, or tap **Got paid in cash**. The row turns green.
 3. On Home, open the **Today** card → **Review follow-ups** → **Send**.
 
