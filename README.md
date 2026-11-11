@@ -6,6 +6,20 @@
 
 Built for the PayPal AI Hackathon 2026 with PayPal Invoicing + Google Gemini (free tier), with Claude as a drop-in alternative.
 
+## For judges: try it in 3 minutes
+
+No sign-up needed. Open **https://tab-cd8v.onrender.com** (best in Chrome; voice works in Chrome and Edge).
+
+1. **Make a sale.** Tap **Example** (or the microphone and say something like *"Priya took three dozen cupcakes, she'll pay Friday"*), then **Next**. Try **Ejemplo** for a Spanish note. Tab shows a one-sentence invoice and the message the customer will get, in their language.
+2. **Send it.** Tap **Send with PayPal**. After a 5-second undo window, a real **PayPal sandbox invoice** is created and sent.
+3. **Get paid** (pick one):
+   - **As the customer:** open the person → **their pay page**, log in with the PayPal **sandbox buyer** account given in the Devpost testing instructions, and pay. Within about 15 seconds the row turns green in Tab.
+   - **Without logging in:** open the person → **Got paid in cash**. Tab records the payment on the PayPal invoice.
+4. **Let Tab plan follow-ups.** On Home, the **Today** card says whether you'll be short for a bill. Tap **Review follow-ups** → **Send**.
+5. **See the books.** Open **Books** for the AG Grid ledger (filters, search, CSV export).
+
+The demo starts with example customers (marked "example"); invoices you create are real sandbox invoices. **Settings → Reset example data** restores the starting state. The free server sleeps when idle, so the first load can take about 30 seconds.
+
 ## The problem
 
 Millions of people run one-person businesses: home bakers, tutors, babysitters, cleaners, hair braiders, handymen. Many are immigrants working in a second language. Their business runs on trust and informal credit like "she'll pay Friday."
