@@ -7,6 +7,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 import * as store from "./lib/store.js";
 import * as paypal from "./lib/paypal.js";
 import * as ai from "./lib/ai.js";
+import { OPEN, viewInvoice, cashOutlook } from "./lib/forecast.js";
 
 dotenv.config({ path: path.join(HERE, ".env"), quiet: true });
 
@@ -15,50 +16,11 @@ app.use(express.json({ limit: "1mb" }));
 app.use(express.static(path.join(HERE, "public")));
 
 const PORT = Number(process.env.PORT || 3000);
-const OPEN = new Set(["SENT", "UNPAID", "PARTIALLY_PAID", "SCHEDULED", "DRAFT"]);
-
 // ------------------------------------------------------------------ helpers
 const db = () => store.load();
-const daysBetween = (a, b) => Math.round((new Date(b + "T12:00:00Z") - new Date(a + "T12:00:00Z")) / 86400_000);
-
-function view(inv) {
-  const t = store.today();
-  const outstanding = Math.max(0, +(inv.amount - inv.paidAmount).toFixed(2));
-  const open = OPEN.has(inv.status);
-  return {
-    ...inv,
-    outstanding,
-    daysLate: open ? Math.max(0, daysBetween(inv.dueDate, t)) : 0,
-    daysUntilDue: daysBetween(t, inv.dueDate),
-    lastReminderDaysAgo: inv.lastReminderAt ? daysBetween(inv.lastReminderAt.slice(0, 10), t) : null,
-    live: Boolean(inv.paypalId && !inv.paypalId.startsWith("SIM-")),
-  };
-}
-
-function forecast() {
-  const d = db();
-  const t = store.today();
-  const open = d.invoices.filter((i) => OPEN.has(i.status)).map(view);
-  const owed = open.reduce((s, i) => s + i.outstanding, 0);
-  const overdue = open.filter((i) => i.daysLate > 0).reduce((s, i) => s + i.outstanding, 0);
-  // Day-by-day projection for the next 14 days: bills go out on their due date;
-  // invoices not yet due are expected on their due date; overdue ones are NOT counted (uncertain).
-  const days = [];
-  let bal = d.cash;
-  let lowest = { amount: bal, date: t, bill: null };
-  let firstShort = null;
-  for (let n = 0; n <= 14; n++) {
-    const date = store.addDays(t, n);
-    const inflow = open.filter((i) => i.daysLate === 0 && i.dueDate === date).reduce((s, i) => s + i.outstanding, 0);
-    const billsToday = d.bills.filter((b) => b.dueDate === date);
-    const outflow = billsToday.reduce((s, b) => s + b.amount, 0);
-    bal += inflow - outflow;
-    days.push({ date, inflow, outflow, balance: +bal.toFixed(2), bills: billsToday.map((b) => b.name) });
-    if (bal < 0 && !firstShort) firstShort = { date, amount: +(-bal).toFixed(2), bill: billsToday[0]?.name || null };
-    if (bal < lowest.amount) lowest = { amount: +bal.toFixed(2), date, bill: billsToday[0]?.name || null };
-  }
-  return { cash: d.cash, owed: +owed.toFixed(2), overdue: +overdue.toFixed(2), lowest, firstShort, shortfall: Math.max(0, -lowest.amount), days };
-}
+// The invoice view and the 14-day cash outlook are pure functions in lib/forecast.js.
+const view = (inv) => viewInvoice(inv, store.today());
+const forecast = () => cashOutlook(db(), store.today());
 
 function log(text, kind = "info") {
   const d = db();
@@ -406,6 +368,7 @@ app.post("/api/plan/run", async (req, res) => {
     try {
       const inv = findInvoice(a.invoice_id);
       const kind = a.action === "remind" ? "reminder" : a.action;
+      if (!["reminder", "firm_reminder", "split_offer"].includes(kind)) throw httpError(400, "Unknown action");
       const msg = await followUp(inv, kind);
       results.push({ invoice_id: a.invoice_id, ok: true, english: msg.english });
     } catch (e) {
