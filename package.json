@@ -1,16 +1,20 @@
 {
   "name": "tab-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Get paid without the awkward part: say a sale out loud and Tab sends a PayPal invoice in your customer's language, follows up politely when they're late, and warns you before you run short on rent.",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test",
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rithikasridharbabu-2007/tab.git"
+  },
   "type": "module",
   "engines": {
     "node": ">=20"

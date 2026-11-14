@@ -70,6 +70,24 @@ With no keys, Tab runs in practice mode: no PayPal, basic text rules.
 
 **Deploy:** the repo includes `render.yaml`. On [Render](https://render.com), choose New → Blueprint, pick this repo and add the variables above.
 
+## Tests
+
+```bash
+npm test
+```
+
+The suite uses Node's built-in test runner (`node:test`), with no extra dependencies. It needs no keys and makes no calls to PayPal or an AI provider: PayPal requests are checked against a mocked `fetch`.
+
+What is covered:
+
+- **Rule-based fallbacks** (`lib/ai.js`, used when no AI key is set): voice note to invoice (customer match, quantities, stated and usual prices, asking instead of guessing a price), due dates ("Friday", no day given, month and year ends, several timezones), the fallback messages, and the follow-up planner.
+- **PayPal client** (`lib/paypal.js`): the requests built for create, send, remind, cancel, partial payment and cash payment; that every write carries a `PayPal-Request-Id`; error handling; and that webhook verification only accepts PayPal's `SUCCESS` answer.
+- **Store** (`lib/store.js`): date helpers, example data, save, reload and reset.
+- **Cash outlook** (`lib/forecast.js`): days late, money owed, and the 14-day projection against bills.
+- **Server smoke test**: starts the app in practice mode and walks note → invoice → paid in cash, the follow-up plan, input validation, and the refusal of an unsigned webhook.
+
+Not covered: the AI-provider calls themselves (Gemini, Claude), the browser UI, and live PayPal sandbox behaviour.
+
 ## Limits
 
 - Runs on the PayPal **sandbox** (test money). Production needs a live PayPal app.
