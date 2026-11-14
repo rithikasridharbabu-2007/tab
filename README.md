@@ -1,5 +1,7 @@
 # Tab
 
+[![CI](https://github.com/rithikasridharbabu-2007/tab/actions/workflows/ci.yml/badge.svg)](https://github.com/rithikasridharbabu-2007/tab/actions/workflows/ci.yml)
+
 **Get paid without the awkward part.**
 
 Say a sale out loud. Tab sends a PayPal invoice in your customer's language, follows up politely when they're late, and warns you before you run short on rent.
