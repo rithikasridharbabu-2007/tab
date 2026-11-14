@@ -4,6 +4,10 @@
 
 Say a sale out loud. Tab sends a PayPal invoice in your customer's language, follows up politely when they're late, and warns you before you run short on rent.
 
+<img src="docs/demo.gif" alt="Tab on a phone: a sale note becomes a one-sentence invoice for Priya with a preview of her message, then is sent with a five-second undo and appears under Who owes you" width="312">
+
+*Recorded in practice mode (no PayPal or AI keys), using the typed example note. The mic fills in the same box.*
+
 ---
 
 ## Who it's for
@@ -47,6 +51,19 @@ The AI never moves money or sends a message on its own. It drafts and plans; you
 If the AI is unavailable, simple rules take over so the app keeps working.
 
 **Stack:** Node.js, Express, vanilla JS (phone-first, installable), AG Grid, browser speech recognition, Render.
+
+## How the AI is kept safe
+
+The AI drafts; the owner decides. That rule is built into the code, not just the prompt.
+
+- **It cannot reach PayPal.** The AI module (`lib/ai.js`) only returns text and structured drafts. It has no access to the PayPal client; every invoice, reminder and payment record goes through a server route that the owner triggers.
+- **Nothing is sent without a tap.** A new invoice shows one sentence to confirm and the exact message the customer will get, then waits five seconds with an Undo before sending. The follow-up plan is only a proposal until the owner approves the items they want.
+- **Answers are checked before use.** Every AI reply must match a fixed schema (customer, items, amounts, due date, or a list of allowed follow-up actions). A reply that does not fit is rejected, and an unknown action in a plan is refused instead of being carried out.
+- **It asks instead of guessing money.** If no price is said and none is on file, the draft comes back with a question, not an invented amount. A price taken from the customer's usual order is flagged for checking.
+- **It works without the AI.** If the provider is down or no key is set, rule-based fallbacks produce the draft, the messages and the plan.
+- **Retries cannot double-charge.** PayPal writes carry a request id, and payment updates are accepted only from webhooks whose signature PayPal verifies.
+
+What the AI does see: the note you spoke or typed, and your customer list (names, emails, language and usual orders), which is sent to the AI provider you configure so it can match the customer.
 
 ## Run it yourself
 
